@@ -13,3 +13,12 @@ hooks="files"     Specify hooks to add
 bin="file"        Specify binaries to add
 lib="file"        Specify libraries to add
 ```
+### Dependencies 
+- busybox (read INSTALL)
+- cpio 
+- kmod
+- eudev 
+- findutils
+- gzip 
+- coreutils
+- util-linux

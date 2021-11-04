@@ -1,0 +1,7 @@
+(1): Busybox
+Download the tarball, extract it, generate the configuration file and compile `busybox`.
+After that, use the command to install it: 
+-------------------------------------------------------------------------------
+ROOTDIR=/ # modify this if you want to install to another directory
+make CONFIG_PREFIX=$ROOTDIR/usr/share/gen-initramfs/busybox-initramfs install
+-------------------------------------------------------------------------------
