@@ -1,0 +1,97 @@
+#!/bin/ash
+
+mount_handle=mount_fs
+
+msg() {
+echo ">> $@..."
+}
+
+err() {
+echo ">>> $@"
+}
+
+die() {
+err "$@"
+err "Dropping you into the emergency shell"
+/bin/sh
+}
+
+mount_fs() {
+[ -n "$rootfstype" ] && rootfstype="$rootfstype,"
+rootfstype="$rootfstype$ro"
+
+[ ! -b "$DEV" ] && die "Device $DEV is not found" 
+mount -n -t ${rootfstype} -o ${rootflags} ${DEV} $1 
+}
+
+parse_root() {
+case "$root" in 
+/dev/*  ) DEV="$root";;
+UUID=*  ) eval $root; DEV=$(blkid --uuid="$UUID");;
+LABEL=* ) eval $root; DEV=$(blkid --uuid="$LABEL");;
+""      ) die "Root not specified!"
+esac
+}
+
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+
+msg "Mounting essential filesystems"
+mount -n -t devtmpfs devtmpfs /dev
+mount -n -t sysfs sysfs /sys
+mount -n -t proc proc /proc
+mount -n -t tmpfs tmpfs /run
+
+msg "Parsing the command line"
+read -r cmdline < /proc/cmdline
+
+for x in $cmdline; do 
+case $x in
+init=*       )      init=${x#init=}              ;;
+root=*       )      root=${x#root=}              ;;
+rootfstype=* )      rootfstype={x#rootfstype=}   ;;
+rootflag=*   )      rootflags=${x$rootflags=}    ;;
+ro           )      ro="ro"                      ;;
+rw           )      ro="rw"                      ;;
+esac
+done
+
+msg "Working with keyboard modules"
+for mod in input mousedev usbcore ehci_hcd uhci_hcd ohci_hcd usbhid hid_generic; do
+modprobe $mod
+done
+
+msg "Triggering udev"
+if ! command -v udevd; then
+ die "udevd cannot be found!"
+fi
+
+for x in /hooks-before/* ; do
+  ./$x
+done
+
+udevd --daemon --resolve-names=never
+udevadm trigger --action=add    --type=subsystems
+udevadm trigger --action=add    --type=devices
+udevadm trigger --action=change --type=devices
+udevadm settle
+
+for x in /hooks/* ; do
+ . "$x"
+done
+
+parse_root
+
+if ! $mount_handle /new_root ; then
+       die "Failed to mount to /new_root" 
+else
+        msg "Mounted $device on /new_root"
+fi
+
+[ ! -f "/new_root/$init" ] && die "$init not found!"
+
+for x in /hooks-after/* ; do
+ ./$x
+done
+
+killall udevd 
+exec switch_root /new_root $init "$@"
