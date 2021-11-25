@@ -48,8 +48,8 @@ for x in $cmdline; do
 case $x in
 init=*       )      init=${x#init=}              ;;
 root=*       )      root=${x#root=}              ;;
-rootfstype=* )      rootfstype={x#rootfstype=}   ;;
-rootflag=*   )      rootflags=${x$rootflags=}    ;;
+rootfstype=* )      rootfstype=${x#rootfstype=}  ;;
+rootflag=*   )      rootflags=${x#rootflags=}    ;;
 ro           )      ro="ro"                      ;;
 rw           )      ro="rw"                      ;;
 esac
