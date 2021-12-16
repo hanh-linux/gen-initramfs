@@ -1,3 +1,5 @@
+#!/bin/bash
+
 [ -z "$DESTDIR" ] && DESTDIR=/
 install -Dm755 gen-initramfs $DESTDIR/bin/gen-initramfs
 install -Dm755 init.in $DESTDIR/usr/share/gen-initramfs/init.in

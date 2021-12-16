@@ -1,3 +1,5 @@
+#!/bin/bash
+
 eval "$*"
 
 [ -z "$kver" ] && kver=$(uname -r)
