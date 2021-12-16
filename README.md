@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/hanh-linux/hanh-linux.github.io/main/assets/img/logo.svg" width="200" align=right href="https://hanh-linux.github.io/"/>
+
 ## gen-initramfs
 Default tool for generating initial RAM filesystem in Hanh Linux. 
 ### Usage 
