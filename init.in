@@ -1,6 +1,7 @@
-#!/bin/ash
+#!/bin/sh
 
 mount_handle=mount_fs
+init=/usr/sbin/openrc-init
 
 msg() {
 echo ">> $@..."
@@ -81,6 +82,7 @@ done
 
 parse_root
 
+msg "Using $mount_handle command for mounting file system"
 if ! $mount_handle /new_root ; then
        die "Failed to mount to /new_root" 
 else
