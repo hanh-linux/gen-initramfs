@@ -1,7 +1,7 @@
 #!/bin/sh
 
 mount_handle=mount_fs
-init=/usr/sbin/openrc-init
+init=/usr/bin/openrc-init
 
 msg() {
 echo ">> $@..."
@@ -18,10 +18,14 @@ err "Dropping you into the emergency shell"
 }
 
 mount_fs() {
-[ -n "$rootfstype" ] && rootfstype="$rootfstype,"
+if test -n "$rootfstype"; then
+       	rootfstype="$rootfstype,"
+fi
 rootfstype="$rootfstype$ro"
 
-[ ! -b "$DEV" ] && die "Device $DEV is not found" 
+if ! test -b "$DEV"; then
+       	die "Device $DEV is not found" 
+fi
 mount -n -t ${rootfstype} -o ${rootflags} ${DEV} $1 
 }
 
@@ -61,24 +65,11 @@ for mod in input mousedev usbcore ehci_hcd uhci_hcd ohci_hcd usbhid hid_generic;
 modprobe $mod
 done
 
-msg "Triggering udev"
-if ! command -v udevd; then
- die "udevd cannot be found!"
+if test -n "$(ls /hooks-before/)"; then
+	for x in /hooks-before/* ; do
+		. $x
+	done
 fi
-
-for x in /hooks-before/* ; do
-  ./$x
-done
-
-udevd --daemon --resolve-names=never
-udevadm trigger --action=add    --type=subsystems
-udevadm trigger --action=add    --type=devices
-udevadm trigger --action=change --type=devices
-udevadm settle
-
-for x in /hooks/* ; do
- . "$x"
-done
 
 parse_root
 
@@ -89,11 +80,14 @@ else
         msg "Mounted $device on /new_root"
 fi
 
-[ ! -f "/new_root/$init" ] && die "$init not found!"
+if ! test -f "/new_root/$init"; then
+	die "$init not found"
+fi
 
-for x in /hooks-after/* ; do
- ./$x
-done
+if test -n "$(ls /hooks-after/)"; then
+	for x in /hooks-after/* ; do
+		. $x
+	done
+fi
 
-killall udevd 
 exec switch_root /new_root $init "$@"

@@ -1,3 +1,8 @@
-[ -z "$DESTDIR" ] && DESTDIR=/
-install -Dm755 gen-initramfs $DESTDIR/bin/gen-initramfs
-install -Dm755 init.in $DESTDIR/usr/share/gen-initramfs/init.in
+#!/bin/sh
+
+sed "s/CONFDIR/$SYSROOT/etc/g" -i gen-initramfs.conf 
+install -Dm755 gen-initramfs $DESTDIR/$SYSROOT/bin/gen-initramfs
+install -Dm755 init.in $DESTDIR/$SYSROOT/usr/share/gen-initramfs/init.in
+install -Dm644 gen-initramfs.conf $DESTDIR/$SYSROOT/etc/
+install -dm755 $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks 
+tar -C $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks/ -xf hooks-initramfs.tar.xz

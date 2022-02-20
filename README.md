@@ -15,10 +15,9 @@ lib="file"        Specify libraries to add
 ```
 ### Dependencies 
 - busybox (read INSTALL)
-- cpio 
-- kmod
-- eudev 
+- cpio  
 - findutils
 - gzip 
-- coreutils
-- util-linux
+- coreutils 
+- util-linux 
+Depends heavily on hooks you want to use. 
