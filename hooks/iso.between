@@ -1,0 +1,36 @@
+#!/bin/sh
+export mount_handle=mount_iso
+work=/run/fs/work
+write=/run/fs/write
+sys=/run/fs/sys
+
+
+general_die() {
+die "Something went wrong!"
+}
+
+echo "Press any key to continue"
+read a
+
+msg "Finding the installation disc"
+for x in $cmdline; do
+case $x in
+isodev=*   ) iso=${x#isodev=}                                         ;;
+isouuid=*  ) eval $x; iso=$(blkid | grep $isouuid  | cut -d ":" -f 1) ;;
+isolabel=* ) eval $x; iso=$(blkid | grep $isolabel | cut -d ":" -f 1) ;;
+esac
+done
+
+[ -z "$iso" ] && iso=$(blkid | grep "HANHLINUX" | cut -d ":" -f1)
+[ ! -b "$iso" ] && die "The installation disc cannot be found!"
+
+mount -t iso9660 -o ro $iso /run/cdrom
+
+loopdev=$(losetup -f)
+losetup $loopdev /run/cdrom/fs/fs.sfs
+mount -t squashfs -o ro $loopdev $sys || general_die
+export root=$loopdev
+
+mount_iso () {
+mount -t overlay overlay -o upperdir=$write,lowerdir=$sys,workdir=$work ${1} || general_die
+}

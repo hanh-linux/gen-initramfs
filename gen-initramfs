@@ -28,10 +28,11 @@ fi
 
 work="$(pwd)/workdir"
 
+test -d $work && echo "$work exists! Remove or move it for the process" && exit 1
 mkdir -p $work
 cd $work 
 
-echo "(1/4) Working on essential files..."
+echo "(1/3) Working on essential files..."
 cp -r $sysroot/usr/share/gen-initramfs/busybox-initramfs/* .
 mkdir -p new_root hooks-before hooks-after \
 	etc usr/lib usr/bin var tmp run sys proc \
@@ -48,6 +49,12 @@ ln -sf usr/lib usr/lib64
 mknod -m 640 dev/console c 5 1
 mknod -m 664 dev/null    c 1 3
 
+
+liblink=$(readlink $sysroot/lib) 
+if test -z "$liblink"; then 
+	liblink=/lib
+fi
+
 for x in $bin; do
 	cp -r $sysroot/$bindir/$x $workdir/$bindir/$x
 done
@@ -57,46 +64,31 @@ for x in $lib; do
 done
 
 for x in $hooks; do 
-	for y in "before" "after"; do 
-		if test -n "$y"; then
-			filetype=".$y"
-			stage="-$y"
-		fi
+	for y in "before" "between" "after"; do 
+		filetype=".$y"
+		stage="-$y"
 
 		if test -f "$sysroot/$prefix/share/gen-initramfs/hooks/${x}${y}"; then
 		       	install -Dm755 $sysroot/$prefix/share/gen-initramfs/hooks/"${x}${y}" ./hooks$stage/$x
+			eval hooks_${y}=\"\$hooks_${y} $x\"
 		fi
 	done
 	
 	if test -f $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh; then
 		. $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh
 	fi
+	eval "echo hooks_${y}=\"\$hooks_${y}\" >> $work/hookorder"
 done
 
-echo "(2/4) Copying modules..."
-
-liblink=$(readlink $sysroot/lib) 
-
-if test -z "$liblink"; then 
-	liblink=/lib
-fi
-
-for modgrp in crypto fs lib; do
-	cp -r $sysroot/$liblink/modules/$kver/kernel/$modgrp $work/usr/lib/modules/$kver/kernel/$modgrp
-done
-
-for modgrp in hid block ata md firewire scsi message pcmcia virtio usb/host usb/storage; do
-	cp -r $sysroot/$liblink/lib/modules/$kver/kernel/drivers/$modgrp $work/usr/lib/modules/$kver/kernel/drivers/$modgrp
-done
-
-for mod in $modules; do
-	cp -r $sysroot/$liblink/modules/$kver/kernel/$mod $work/usr/lib/modules/$kver/kernel/$mod
-done
-         
-cp -r $sysroot/$liblink/modules/$kver/modules.* lib/modules/$kver/
-
-echo "(3/4) Copying init file..."
+echo "(2/3) Copying init file..."
 install -Dm755 $sysroot/$prefix/share/gen-initramfs/init.in ./init
 
-echo "(4/4) Generating initramfs..."
+echo "(3/3) Generating initramfs..."
 find . | cpio -o -H newc | gzip -9 > initramfs-$kver.img
+
+addmod() {
+for modpath in $*; do 
+	cp -r $sysroot/$liblink/modules/$kver/kernel/$modpath \
+		$workdir/$liblink/modules/$kver/kernel/$(dirname $modpath)
+done
+}

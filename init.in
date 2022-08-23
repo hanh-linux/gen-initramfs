@@ -1,5 +1,6 @@
 #!/bin/sh
 
+. /hookorder
 mount_handle=mount_fs
 init=/usr/bin/openrc-init
 
@@ -57,21 +58,29 @@ rootfstype=* )      rootfstype=${x#rootfstype=}  ;;
 rootflag=*   )      rootflags=${x#rootflags=}    ;;
 ro           )      ro="ro"                      ;;
 rw           )      ro="rw"                      ;;
+modules=*    )      modules="${x#modules=}"      ;;
 esac
 done
 
-msg "Working with keyboard modules"
-for mod in input mousedev usbcore ehci_hcd uhci_hcd ohci_hcd usbhid hid_generic; do
-modprobe $mod
-done
+if test -n "$modules"; then 
+	msg "Loading /proc/cmdline modules: $modules"
+	modprobe $modules
+fi
 
-if test -n "$(ls /hooks-before/)"; then
-	for x in /hooks-before/* ; do
-		. $x
+if test -n "$hooks_before"; then
+	for x in $hooks_before ; do
+		echo "::: Running $x"
+		. /hooks-before/$x
 	done
 fi
 
 parse_root
+
+if test -n "$hooks_between"; then 
+	for x in $hooks_between ; do
+		. /hooks-between/$x 
+	done
+fi
 
 msg "Using $mount_handle command for mounting file system"
 if ! $mount_handle /new_root ; then
@@ -84,9 +93,9 @@ if ! test -f "/new_root/$init"; then
 	die "$init not found"
 fi
 
-if test -n "$(ls /hooks-after/)"; then
-	for x in /hooks-after/* ; do
-		. $x
+if test -n "$hooks_after"; then
+	for x in $hooks_after ; do
+		. /hooks-after/$x
 	done
 fi
 

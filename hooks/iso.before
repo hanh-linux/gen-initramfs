@@ -1,0 +1,11 @@
+#!/bin/sh
+for MOD in overlay iso9660 squashfs loop; do 
+modprobe $MOD
+done
+
+work=/run/fs/work
+write=/run/fs/write
+sys=/run/fs/sys
+
+mkdir /run/cdrom
+mkdir -p $work $write $sys 

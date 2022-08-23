@@ -5,4 +5,4 @@ install -Dm755 gen-initramfs $DESTDIR/$SYSROOT/bin/gen-initramfs
 install -Dm755 init.in $DESTDIR/$SYSROOT/usr/share/gen-initramfs/init.in
 install -Dm644 gen-initramfs.conf $DESTDIR/$SYSROOT/etc/
 install -dm755 $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks 
-tar -C $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks/ -xf hooks-initramfs.tar.xz
+install -Dm755 hooks/* $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks/
