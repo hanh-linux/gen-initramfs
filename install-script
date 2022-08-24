@@ -1,8 +1,13 @@
 #!/bin/sh
 
 sed "s|CONFDIR|$SYSROOT/etc|g" -i gen-initramfs.conf 
-install -Dm755 gen-initramfs $DESTDIR/$SYSROOT/bin/gen-initramfs
+install -dm755 $DESTDIR/$SYSROOT/usr/bin 
+install -dm755 $DESTDIR/$SYSROOT/usr/share/gen-initramfs/
+install -dm755 $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks
+install -dm755 $DESTDIR/$SYSROOT/etc/
+
+
+install -Dm755 gen-initramfs $DESTDIR/$SYSROOT/usr/bin/gen-initramfs
 install -Dm755 init.in $DESTDIR/$SYSROOT/usr/share/gen-initramfs/init.in
-install -Dm644 gen-initramfs.conf $DESTDIR/$SYSROOT/etc/
-install -dm755 $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks 
+install -Dm644 gen-initramfs.conf $DESTDIR/$SYSROOT/etc/ 
 install -Dm755 hooks/* $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks/
