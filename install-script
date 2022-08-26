@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sed "s|CONFDIR|$SYSROOT/etc|g" -i gen-initramfs.conf 
+sed "s|CONFDIR|$SYSROOT/etc|g" -i gen-initramfs.conf gen-initramfs 
 install -dm755 $DESTDIR/$SYSROOT/usr/bin 
 install -dm755 $DESTDIR/$SYSROOT/usr/share/gen-initramfs/
 install -dm755 $DESTDIR/$SYSROOT/usr/share/gen-initramfs/hooks

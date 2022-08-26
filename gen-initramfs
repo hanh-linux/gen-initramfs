@@ -6,6 +6,10 @@ if test -z "$kver"; then
        	kver="$(uname -r)"
 fi
 
+if test -z "$prefix"; then
+	prefix=/usr
+fi
+
 if test -z "$sysroot"; then
        	sysroot=/
 fi
