@@ -1,18 +1,13 @@
-addmod drivers/net/wireless
-addmod drivers/mmc/core/mmc_core.ko*
-addmod net/mac80211/mac80211.ko*
-addmod net/rekill/rfkill.ko*
-addmod drivers/soc/qcom/qmi_helpers.ko*
-addmod drivers/hwmon/hwmon.ko*
-addmod drivers/bcma/bcma.ko* 
-addmod drivers/ssb/ssb.ko*
-addmod drivers/char/hw_random/rng-core.ko* 
-addmod lib/math/cordic.ko*
-addmod drivers/virtio/virtio.ko*
-addmod drivers/virtio/virtio_ring.ko*
-addmod lib/crc-ccitt.ko*
-addmod drivers/net/mii.ko*
-addmod drivers/net/usb/usbnet.ko*
-addmod drivers/net/usb/rndis_host.ko*
-addmod drivers/misc/eeprom/eeprom_93cx6.ko*
-addmod lib/crc-itu-t.ko* 
+for x in drivers/net/wireless drivers/mmc/core/mmc_core.ko* \
+	net/mac80211/mac80211.ko* net/rfkill/rfkill.ko* \
+	drivers/soc/qcom/qmi_helpers.ko* drivers/hwmon/hwmon.ko* \
+	drivers/bcma/bcma.ko* drivers/ssb/ssb.ko* \
+	drivers/char/hw_random/rng-core.ko* lib/math/cordic.ko* \
+	drivers/virtio/virtio.ko* drivers/virtio/virtio_ring.ko* \
+	lib/crc-ccitt.ko* drivers/net/mii.ko* drivers/net/usb/usbnet.ko* \
+	drivers/net/usb/rndis_host.ko* drivers/misc/eeprom/eeprom_93cx6.ko* \
+	lib/crc-itu-t.ko*; do
+
+	cp -r $sysroot/$liblink/$dirmod/$x \
+		$workdir/usr/lib/$dirmod/$(dirname $x) 
+done

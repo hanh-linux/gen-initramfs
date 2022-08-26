@@ -5,8 +5,12 @@ mkdir -p $workdir/$liblink/modules/$kver/kernel/drivers/net
 
 
 for x in ethernet phy hyperv vmxnet3; do
-	addmod drivers/net/$x
+	cp -r $sysroot/$liblink/$dirmod/drivers/net/$x \
+		$workdir/usr/lib/$dirmod/drivers/net
 done
-addmod net/packet/af_packet.ko*
-addmod drivers/virtio/virtio_pci.ko*
-addmod kernel/drivers/net/virtio_net.ko*
+cp -r $sysroot/$liblink/$dirmod/net/packet/af_packet.ko* \
+	$workdir/usr/lib/$dirmod/net/packet
+cp -r $sysroot/$liblink/$dirmod/drivers/virtio/virtio_pci.ko* \
+	$workdir/usr/lib/$dirmod/drivers/virtio/
+cp -r $sysroot/$liblink/$dirmod/drivers/net/virtio_net.ko* \
+	$workdir/usr/lib/$dirmod/drivers/net

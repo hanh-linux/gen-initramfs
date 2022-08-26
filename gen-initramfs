@@ -1,6 +1,6 @@
 #!/bin/sh
 eval "$*"
-. CONFDIR/gen-initramfs.conf || exit 1
+. //etc/gen-initramfs.conf || exit 1
 
 if test -z "$kver"; then
        	kver="$(uname -r)"
@@ -31,6 +31,8 @@ if test -n "$drivers"; then
 fi
 
 work="$(pwd)/workdir"
+dirmod="modules/$kver/kernel"
+hookdir="share/gen-initramfs/hooks/"
 
 test -d $work && echo "$work exists! Remove or move it for the process" && exit 1
 mkdir -p $work
@@ -68,20 +70,19 @@ for x in $lib; do
 done
 
 for x in $hooks; do 
-	for y in "before" "between" "after"; do 
-		filetype=".$y"
-		stage="-$y"
-
-		if test -f "$sysroot/$prefix/share/gen-initramfs/hooks/${x}${y}"; then
-		       	install -Dm755 $sysroot/$prefix/share/gen-initramfs/hooks/"${x}${y}" ./hooks$stage/$x
-			eval hooks_${y}=\"\$hooks_${y} $x\"
-		fi
-	done
+	test -f $sysroot/$prefix/$hookdir/$x.before && \
+		install -Dm755 $sysroot/$prefix/$hookdir/$x.before $workdir/hooks-before && \
+		hooks_before="$hooks_before $x"
+	test -f $sysroot/$prefix/$hookdir/$x.between && \
+		install -Dm755 $sysroot/$prefix/$hookdir/$x.between $workdir/hooks-between && \
+		hooks_between="$hooks_between $x"
+	test -f $sysroot/$prefix/$hookdir/$x.after && \
+		install -Dm755 $sysroot/$prefix/$hookdir/$x.after $workdir/hooks-after && \
+		hooks_after="$hooks_after $x"
 	
 	if test -f $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh; then
 		. $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh
 	fi
-	eval "echo hooks_${y}=\"\$hooks_${y}\" >> $work/hookorder"
 done
 
 echo "(2/3) Copying init file..."
@@ -89,10 +90,3 @@ install -Dm755 $sysroot/$prefix/share/gen-initramfs/init.in ./init
 
 echo "(3/3) Generating initramfs..."
 find . | cpio -o -H newc | gzip -9 > initramfs-$kver.img
-
-addmod() {
-for modpath in $*; do 
-	cp -r $sysroot/$liblink/modules/$kver/kernel/$modpath \
-		$workdir/$liblink/modules/$kver/kernel/$(dirname $modpath)
-done
-}
