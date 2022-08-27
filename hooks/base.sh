@@ -16,8 +16,8 @@ done
 mkdir -p $workdir/usr/lib/$dirmod/fs/isofs 
 
 # Thermal modules
-cp -r $sysroot/$liblink/$dirmod/drivers/acpi/thermal* \
-	$workdir/usr/lib/$dirmod/drivers/acpi/thermal 
+cp -r $sysroot/$liblink/$dirmod/drivers/acpi/thermal.ko* \
+	$workdir/usr/lib/$dirmod/drivers/acpi/ 
 
 # SATA modules
 cp -r $sysroot/$liblink/$dirmod/drivers/ata \

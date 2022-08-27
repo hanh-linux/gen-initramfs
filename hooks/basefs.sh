@@ -12,12 +12,10 @@ add_crypto() {
 		$workdir/usr/lib/$dirmod/crypto/
 }
 
-echo "Adding ext-based modules..."
-# Ext2 
+echo "Adding ext-based modules..." 
 mkdir -p $workdir/usr/lib/$dirmod/fs
 cp -r $sysroot/$liblink/$dirmod/fs/mbcache* \
 	$workdir/usr/lib/$dirmod/fs/
-add_fs ext2
 # Ext3/Ext4
 add_fs jbd2
 add_fs ext4
@@ -36,4 +34,5 @@ add_crypto crc32c_generic
 echo "Adding fat/exfat/nls modules"
 add_fs fat
 add_fs exfat
-add_fs nls 
+add_fs nls
+

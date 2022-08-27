@@ -3,7 +3,7 @@ list="\
 	thermal sd_mod sr_mod scsi_mod \
 	mousedev ehci_hcd uhci_hcd ohci_hcd \
 	cdrom isofs ata_generic pata_acpi ata_piix \
-	usbcore usbhid hid_generic"
+	usbcore usbhid hid_generic nvme"
 
 for module in $list; do 
 	modprobe $module
