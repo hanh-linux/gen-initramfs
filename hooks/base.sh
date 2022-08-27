@@ -24,7 +24,8 @@ cp -r $sysroot/$liblink/$dirmod/drivers/ata \
 	$workdir/usr/lib/$dirmod/drivers/
 
 # SCSI and block modules 
-cp -r $sysroot/$liblink/$dirmod/block/t10-pi*
+cp -r $sysroot/$liblink/$dirmod/block/t10-pi* \
+	$workdir/usr/lib/$dirmod/block
 for modscsi in scsi_mod sd_mod sr_mod; do 
 	cp -r $sysroot/$liblink/$dirmod/drivers/scsi/$modscsi* \
 		$workdir/usr/lib/$dirmod/drivers/scsi

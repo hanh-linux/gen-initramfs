@@ -1,3 +1,8 @@
+for x in drivers/mmc/core drivers/soc/qcom \
+	drivers/char/hw_random lib/math \
+	drivers/misc/eeprom; do 
+	mkdir -p $workdir/usr/lib/$dirmod/
+done
 for x in drivers/net/wireless drivers/mmc/core/mmc_core.ko* \
 	net/mac80211/mac80211.ko* net/rfkill/rfkill.ko* \
 	drivers/soc/qcom/qmi_helpers.ko* drivers/hwmon/hwmon.ko* \
