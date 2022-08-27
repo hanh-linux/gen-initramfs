@@ -74,8 +74,12 @@ for x in $hooks; do
 		hooks_after="$hooks_after $x"
 	
 	if test -f $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh; then
+		echo "::Adding prerequisite for $x"
 		. $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh
 	fi
+	echo $hook_before 
+	echo $hook_between
+	echo $hook_after
 done
 
 echo "(2/3) Copying init file..."
