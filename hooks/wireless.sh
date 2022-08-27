@@ -5,7 +5,8 @@ for x in drivers/net net/mac80211 \
 	drivers/virtio lib drivers/net/usb \
 	drivers/misc/eeprom \
 	drivers/char/hw_random lib/math \
-	drivers/misc/eeprom lib; do 
+	drivers/misc/eeprom lib \
+	drivers/virtio; do 
 	mkdir -p $workdir/usr/lib/$dirmod/$x
 done
 for x in drivers/net/wireless drivers/mmc/core/mmc_core.ko* \

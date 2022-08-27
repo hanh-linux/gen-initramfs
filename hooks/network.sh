@@ -4,7 +4,7 @@ mkdir -p $workdir/usr/lib/modules/$kver/kernel/net/packet
 mkdir -p $workdir/usr/lib/modules/$kver/kernel/drivers/net 
 mkdir -p $workdir/usr/lib/modules/$kver/kernel/virtio 
 
-for x in ethernet phy hyperv vmxnet3; do
+for x in ethernet phy hyperv vmxnet3 virtio; do
 	cp -r $sysroot/$liblink/$dirmod/drivers/net/$x \
 		$workdir/usr/lib/$dirmod/drivers/net
 done
