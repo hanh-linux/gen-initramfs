@@ -1,4 +1,9 @@
-for x in drivers/mmc/core drivers/soc/qcom \
+for x in drivers/net net/mac80211 \
+	net/rfkill drivers/hwmon \
+	drivers/mmc/core drivers/soc/qcom \
+	drivers/bcma drivers/ssb \
+	drivers/virtio lib drivers/net/usb \
+	drivers/misc/eeprom \
 	drivers/char/hw_random lib/math \
 	drivers/misc/eeprom lib; do 
 	mkdir -p $workdir/usr/lib/$dirmod/$x

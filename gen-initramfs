@@ -41,7 +41,7 @@ cd $work
 
 echo "(1/3) Working on essential files..."
 cp -r $sysroot/usr/share/gen-initramfs/busybox-initramfs/* .
-mkdir -p new_root hooks-before hook-between hooks-after \
+mkdir -p new_root hooks-before hooks-between hooks-after \
 	etc usr/lib usr/bin var tmp run sys proc \
 	dev lib64 mnt opt root var
 
@@ -77,10 +77,17 @@ for x in $hooks; do
 		echo "::Adding prerequisite for $x"
 		. $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh
 	fi
-	echo $hook_before 
-	echo $hook_between
-	echo $hook_after
 done
+
+echo === SUMMARY ========================
+echo hooks-before  : $hooks_before 
+echo hooks-between : $hooks_between
+echo hooks-after   : $hooks_after
+echo ====================================
+
+echo hooks_before="$hooks_before" > $workdir/hookorder 
+echo hooks_between="$hooks_between" >> $workdir/hookorder
+echo hooks_after="$hooks_after" >> $workdir/hookorder
 
 echo "(2/3) Copying init file..."
 install -Dm755 $sysroot/$prefix/share/gen-initramfs/init.in ./init
