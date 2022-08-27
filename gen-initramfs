@@ -1,6 +1,6 @@
 #!/bin/sh
-eval "$*"
 . //etc/gen-initramfs.conf || exit 1
+eval "$*"
 
 if test -z "$kver"; then
        	kver="$(uname -r)"
