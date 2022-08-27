@@ -1,7 +1,7 @@
 for x in drivers/mmc/core drivers/soc/qcom \
 	drivers/char/hw_random lib/math \
-	drivers/misc/eeprom; do 
-	mkdir -p $workdir/usr/lib/$dirmod/
+	drivers/misc/eeprom lib; do 
+	mkdir -p $workdir/usr/lib/$dirmod/$x
 done
 for x in drivers/net/wireless drivers/mmc/core/mmc_core.ko* \
 	net/mac80211/mac80211.ko* net/rfkill/rfkill.ko* \
@@ -14,5 +14,5 @@ for x in drivers/net/wireless drivers/mmc/core/mmc_core.ko* \
 	lib/crc-itu-t.ko*; do
 
 	cp -r $sysroot/$liblink/$dirmod/$x \
-		$workdir/usr/lib/$dirmod/$(dirname $x) 
+		$workdir/usr/lib/$dirmod/$(dirname $x)/ 
 done

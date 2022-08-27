@@ -11,6 +11,6 @@ done
 cp -r $sysroot/$liblink/$dirmod/net/packet/af_packet.ko* \
 	$workdir/usr/lib/$dirmod/net/packet
 cp -r $sysroot/$liblink/$dirmod/drivers/virtio/virtio_pci.ko* \
-	$workdir/usr/lib/$dirmod/drivers/virtio/
+	$workdir/usr/lib/$dirmod/drivers/virtio
 cp -r $sysroot/$liblink/$dirmod/drivers/net/virtio_net.ko* \
 	$workdir/usr/lib/$dirmod/drivers/net
