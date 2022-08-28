@@ -1,7 +1,7 @@
 dirmod="modules/$kver/kernel"
 
 # Create directories structure 
-for x in drivers block fs/isofs; do 
+for x in drivers block fs/isofs lib; do 
 	mkdir -p $workdir/usr/lib/$dirmod/$x 
 done
 
@@ -15,6 +15,9 @@ done
 
 mkdir -p $workdir/usr/lib/$dirmod/fs/isofs 
 
+cp -r $sysroot/$liblink/$dirmod/lib/crc64-rocksoft.ko* \
+	$workdir/usr/lib/$dirmod/lib
+
 # Thermal modules
 cp -r $sysroot/$liblink/$dirmod/drivers/acpi/thermal.ko* \
 	$workdir/usr/lib/$dirmod/drivers/acpi/ 
@@ -26,10 +29,8 @@ cp -r $sysroot/$liblink/$dirmod/drivers/ata \
 # SCSI and block modules 
 cp -r $sysroot/$liblink/$dirmod/block/t10-pi* \
 	$workdir/usr/lib/$dirmod/block
-for modscsi in scsi_mod sd_mod sr_mod; do 
-	cp -r $sysroot/$liblink/$dirmod/drivers/scsi/$modscsi* \
-		$workdir/usr/lib/$dirmod/drivers/scsi
-done
+cp -r $sysroot/$liblink/$dirmod/drivers/scsi/ \
+		$workdir/usr/lib/$dirmod/drivers
 
 # NVMe modules
 cp -r $sysroot/$liblink/$dirmod/drivers/nvme \

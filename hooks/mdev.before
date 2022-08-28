@@ -1,1 +1,1 @@
-mdev -d
+mdev -s -d
