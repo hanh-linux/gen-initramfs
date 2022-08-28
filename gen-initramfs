@@ -85,9 +85,9 @@ echo hooks-between : $hooks_between
 echo hooks-after   : $hooks_after
 echo ====================================
 
-echo hooks_before="$hooks_before" > $workdir/hookorder 
-echo hooks_between="$hooks_between" >> $workdir/hookorder
-echo hooks_after="$hooks_after" >> $workdir/hookorder
+echo hooks_before=\"$hooks_before\" > $workdir/hookorder 
+echo hooks_between=\"$hooks_between\" >> $workdir/hookorder
+echo hooks_after=\"$hooks_after\" >> $workdir/hookorder
 
 echo "(2/3) Copying init file..."
 install -Dm755 $sysroot/$prefix/share/gen-initramfs/init.in ./init

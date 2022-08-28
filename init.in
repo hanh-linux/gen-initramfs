@@ -74,13 +74,13 @@ if test -n "$hooks_before"; then
 	done
 fi
 
-parse_root
-
 if test -n "$hooks_between"; then 
 	for x in $hooks_between ; do
 		. /hooks-between/$x 
 	done
 fi
+
+parse_root
 
 msg "Using $mount_handle command for mounting file system"
 if ! $mount_handle /new_root ; then
