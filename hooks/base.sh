@@ -1,7 +1,7 @@
 dirmod="modules/$kver/kernel"
 
 # Create directories structure 
-for x in drivers block fs/isofs lib; do 
+for x in drivers block fs/isofs; do 
 	mkdir -p $workdir/usr/lib/$dirmod/$x 
 done
 
@@ -15,8 +15,8 @@ done
 
 mkdir -p $workdir/usr/lib/$dirmod/fs/isofs 
 
-cp -r $sysroot/$liblink/$dirmod/lib/crc64-rocksoft.ko* \
-	$workdir/usr/lib/$dirmod/lib
+cp -r $sysroot/$liblink/$dirmod/lib/ \
+	$workdir/usr/lib/$dirmod/
 
 # Thermal modules
 cp -r $sysroot/$liblink/$dirmod/drivers/acpi/thermal.ko* \
