@@ -64,13 +64,13 @@ fi
 
 for x in $hooks; do 
 	test -f $sysroot/$prefix/$hookdir/$x.before && \
-		install -Dm755 $sysroot/$prefix/$hookdir/$x.before $workdir/hooks-before && \
+		install -Dm755 $sysroot/$prefix/$hookdir/$x.before $workdir/hooks-before/$x && \
 		hooks_before="$hooks_before $x"
 	test -f $sysroot/$prefix/$hookdir/$x.between && \
-		install -Dm755 $sysroot/$prefix/$hookdir/$x.between $workdir/hooks-between && \
+		install -Dm755 $sysroot/$prefix/$hookdir/$x.between $workdir/hooks-between/$x && \
 		hooks_between="$hooks_between $x"
 	test -f $sysroot/$prefix/$hookdir/$x.after && \
-		install -Dm755 $sysroot/$prefix/$hookdir/$x.after $workdir/hooks-after && \
+		install -Dm755 $sysroot/$prefix/$hookdir/$x.after $workdir/hooks-after/$x && \
 		hooks_after="$hooks_after $x"
 	
 	if test -f $sysroot/$prefix/share/gen-initramfs/hooks/$x.sh; then
