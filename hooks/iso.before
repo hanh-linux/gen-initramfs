@@ -1,5 +1,14 @@
 #!/bin/sh
-for MOD in overlay iso9660 squashfs loop; do 
+
+echo "Enter modules to load (sh to enter shell) : "
+read -r modules
+if test "$modules" == "sh"; then 
+	echo "Entering shell..."
+	sh 
+	unset modules
+fi
+
+for MOD in overlay iso9660 squashfs loop $modules; do 
 modprobe $MOD
 done
 
