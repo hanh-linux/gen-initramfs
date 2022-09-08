@@ -33,6 +33,8 @@ cp -r $sysroot/$liblink/$dirmod/drivers/scsi/ \
 		$workdir/usr/lib/$dirmod/drivers
 
 # NVMe modules
+cp -r $sysroot/$liblink/$dirmod/drviers/hwmon \
+	$workdir/usr/lib/$dirmod/drivers/hwmon
 cp -r $sysroot/$liblink/$dirmod/drivers/nvme \
 	$workdir/usr/lib/$dirmod/drivers/nvme
 
