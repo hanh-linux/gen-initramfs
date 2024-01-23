@@ -34,7 +34,7 @@ parse_root() {
 case "$root" in 
 /dev/*  ) DEV="$root";;
 UUID=*  ) eval $root; DEV=$(blkid --uuid="$UUID");;
-LABEL=* ) eval $root; DEV=$(blkid --uuid="$LABEL");;
+LABEL=* ) eval $root; DEV=$(blkid --label="$LABEL");;
 ""      ) die "Root not specified!"
 esac
 }
